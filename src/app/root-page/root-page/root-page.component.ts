@@ -1,4 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs';
+
+interface Task {
+  id: number;
+  description: string;
+  completed: boolean;
+}
 
 @Component({
   selector: 'app-root-page',
@@ -6,7 +15,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./root-page.component.scss'],
 })
 export class RootPageComponent implements OnInit {
-  constructor() {}
+  tasks$: Observable<Task[]> | null = null;
 
-  ngOnInit(): void {}
+  constructor(private http: HttpClient) {}
+
+  ngOnInit() {
+    const url = `${environment.apiHost}/tasks`;
+    this.tasks$ = this.http.get<Task[]>(url);
+  }
 }
