@@ -5,5 +5,6 @@ import { SignInWithGoogleButtonComponent } from './sign-in-with-google-button/si
 @NgModule({
   declarations: [SignInWithGoogleButtonComponent],
   imports: [CommonModule],
+  exports: [SignInWithGoogleButtonComponent],
 })
 export class SignInButtonModule {}
