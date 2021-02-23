@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "ng-hoge-app": {
+      "hosting": {
+        "ng-hoge-app": [
+          "ng-hoge-app"
+        ]
+      }
+    }
+  }
+}
