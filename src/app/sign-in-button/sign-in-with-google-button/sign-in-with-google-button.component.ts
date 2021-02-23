@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
+import firebase from 'firebase/app';
 
 @Component({
   selector: 'app-sign-in-with-google-button',
@@ -6,7 +8,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sign-in-with-google-button.component.scss'],
 })
 export class SignInWithGoogleButtonComponent implements OnInit {
-  constructor() {}
+  constructor(private afAuth: AngularFireAuth) {}
 
-  ngOnInit(): void {}
+  ngOnInit() {}
+
+  signIn() {
+    this.afAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+  }
 }
