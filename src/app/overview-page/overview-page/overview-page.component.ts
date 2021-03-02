@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 interface Task {
   id: number;
@@ -17,10 +18,18 @@ interface Task {
 export class OverviewPageComponent implements OnInit {
   tasks$: Observable<Task[]> | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private afAuth: AngularFireAuth) {}
 
   ngOnInit() {
-    const url = `${environment.apiHost}/tasks`;
-    this.tasks$ = this.http.get<Task[]>(url);
+    this.afAuth.idToken.subscribe(idToken => {
+      if (idToken) {
+        const headers = new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${idToken}`,
+        });
+        const url = `${environment.apiHost}/tasks`;
+        this.tasks$ = this.http.get<Task[]>(url, { headers: headers });
+      }
+    });
   }
 }
