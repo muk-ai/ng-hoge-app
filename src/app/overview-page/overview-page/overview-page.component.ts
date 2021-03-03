@@ -23,13 +23,19 @@ export class OverviewPageComponent implements OnInit {
   ngOnInit() {
     this.afAuth.idToken.subscribe(idToken => {
       if (idToken) {
-        const headers = new HttpHeaders({
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${idToken}`,
-        });
-        const url = `${environment.apiHost}/tasks`;
-        this.tasks$ = this.http.get<Task[]>(url, { headers: headers });
+        this.getAuthMe(idToken);
       }
     });
+    const url = `${environment.apiHost}/tasks`;
+    this.tasks$ = this.http.get<Task[]>(url);
+  }
+
+  getAuthMe(idToken: string) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${idToken}`,
+    });
+    const url = `${environment.apiHost}/auth/me`;
+    this.http.get(url, { headers: headers }).subscribe();
   }
 }
