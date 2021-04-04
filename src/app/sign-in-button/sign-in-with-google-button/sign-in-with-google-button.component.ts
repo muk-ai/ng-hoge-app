@@ -14,6 +14,17 @@ export class SignInWithGoogleButtonComponent implements OnInit {
   ngOnInit() {}
 
   signIn() {
-    this.userAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+    this.userAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).subscribe(
+      result => {
+        console.log(result);
+      },
+      error => {
+        console.log('subscribeError');
+        console.log(error);
+      },
+      () => {
+        console.log('completed');
+      }
+    );
   }
 }
