@@ -4,6 +4,12 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import firebase from 'firebase/app';
 import { environment } from 'src/environments/environment';
+import { timeout } from 'rxjs/operators';
+
+interface AuthResult {
+  result: 'AlreadyCreated' | 'Created' | 'Error';
+  error?: any;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -11,29 +17,32 @@ import { environment } from 'src/environments/environment';
 export class UserAuthService {
   constructor(private afAuth: AngularFireAuth, private http: HttpClient) {}
 
-  async signInWithPopup(provider: firebase.auth.AuthProvider) {
+  async signInWithPopup(provider: firebase.auth.AuthProvider): Promise<AuthResult> {
     const result = await this.afAuth.signInWithPopup(provider);
     if (result.user) {
       const idToken = await result.user.getIdToken();
       const url = `${environment.apiHost}/auth/me`;
-      this.http.get(url, this.authzHeaders(idToken)).subscribe(
-        _response => {
-          // NOTE: すでにユーザーは作成済なので何もしない
-        },
-        (err: HttpErrorResponse) => {
-          if (err.status === 404) {
-            this.http.post(url, '', this.authzHeaders(idToken)).subscribe(
-              _response => {
-                // NOTE: ユーザーを作成した時の処理
-              },
-              (_err: HttpErrorResponse) => {
-                alert('ユーザーの作成に失敗しました。');
-              }
-            );
+      try {
+        await this.http
+          .get(url, { responseType: 'text', ...this.authzHeaders(idToken) })
+          .pipe(timeout(10 * 1000))
+          .toPromise();
+        return { result: 'AlreadyCreated' };
+      } catch (error) {
+        if (error.status === 404) {
+          try {
+            await this.http.post(url, '', this.authzHeaders(idToken)).toPromise();
+            return { result: 'Created' };
+          } catch (error) {
+            return { result: 'Error', error };
           }
+        } else {
+          return { result: 'Error', error };
         }
-      );
+      }
     }
+
+    return { result: 'Error' };
   }
 
   private authzHeaders(idToken: string) {
