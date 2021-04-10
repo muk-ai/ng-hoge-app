@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-
 import { AngularFireAuth } from '@angular/fire/auth';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import firebase from 'firebase/app';
 import { environment } from 'src/environments/environment';
 import { timeout } from 'rxjs/operators';
@@ -10,6 +9,8 @@ interface AuthResult {
   result: 'AlreadyCreated' | 'Created' | 'Error';
   error?: any;
 }
+
+const TIMEOUT_MSEC = 5 * 1000;
 
 @Injectable({
   providedIn: 'root',
@@ -25,24 +26,24 @@ export class UserAuthService {
       try {
         await this.http
           .get(url, { responseType: 'text', ...this.authzHeaders(idToken) })
-          .pipe(timeout(10 * 1000))
+          .pipe(timeout(TIMEOUT_MSEC))
           .toPromise();
         return { result: 'AlreadyCreated' };
       } catch (error) {
         if (error.status === 404) {
           try {
-            await this.http.post(url, '', this.authzHeaders(idToken)).toPromise();
+            await this.http.post(url, '', this.authzHeaders(idToken)).pipe(timeout(TIMEOUT_MSEC)).toPromise();
             return { result: 'Created' };
           } catch (error) {
-            return { result: 'Error', error };
+            throw { result: 'Error', error };
           }
         } else {
-          return { result: 'Error', error };
+          throw { result: 'Error', error };
         }
       }
     }
 
-    return { result: 'Error' };
+    throw { result: 'Error' };
   }
 
   private authzHeaders(idToken: string) {
