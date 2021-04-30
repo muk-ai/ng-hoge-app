@@ -8,7 +8,7 @@
 <form [formGroup]="newTaskForm" (ngSubmit)="onSubmit()">
   <label>
     description:
-    <textarea formControlName="description"></textarea>
+    <input type="text" formControlName="description" />
   </label>
   <button type="submit" [disabled]="!newTaskForm.valid">Submit</button>
 </form>
