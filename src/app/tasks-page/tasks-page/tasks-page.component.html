@@ -1,3 +1,11 @@
 <ng-container *ngFor="let task of tasks$ | async">
   <p>id: {{ task.id }} description: {{ task.description }} completed: {{ task.completed }}</p>
 </ng-container>
+
+<form [formGroup]="newTaskForm" (ngSubmit)="onSubmit()">
+  <label>
+    description:
+    <textarea formControlName="description"></textarea>
+  </label>
+  <button type="submit" [disabled]="!newTaskForm.valid">Submit</button>
+</form>
