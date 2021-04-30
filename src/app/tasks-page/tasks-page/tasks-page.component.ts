@@ -4,6 +4,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { FormBuilder, Validators } from '@angular/forms';
 
 interface Task {
   id: number;
@@ -18,8 +19,11 @@ interface Task {
 })
 export class TasksPageComponent implements OnInit {
   tasks$: Observable<Task[]> | null = null;
+  newTaskForm = this.fb.group({
+    description: ['', Validators.required],
+  });
 
-  constructor(private http: HttpClient, private afAuth: AngularFireAuth) {}
+  constructor(private http: HttpClient, private afAuth: AngularFireAuth, private fb: FormBuilder) {}
 
   ngOnInit() {
     this.afAuth.idToken.pipe(first()).subscribe(idToken => {
@@ -30,6 +34,53 @@ export class TasksPageComponent implements OnInit {
         });
         const url = `${environment.apiHost}/tasks`;
         this.tasks$ = this.http.get<Task[]>(url, { headers: headers });
+      }
+    });
+  }
+
+  onSubmit() {
+    this.createTask(this.newTaskForm.value);
+  }
+
+  createTask(formData: any) {
+    this.afAuth.idToken.pipe(first()).subscribe(idToken => {
+      if (idToken) {
+        const headers = new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${idToken}`,
+        });
+        const url = `${environment.apiHost}/tasks`;
+        this.http
+          .post<Task>(url, formData, { headers: headers })
+          .subscribe();
+      }
+    });
+  }
+
+  deleteTask(id: number) {
+    this.afAuth.idToken.pipe(first()).subscribe(idToken => {
+      if (idToken) {
+        const headers = new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${idToken}`,
+        });
+        const url = `${environment.apiHost}/tasks/${id}`;
+        this.http
+          .delete<Task>(url, { headers: headers })
+          .subscribe();
+      }
+    });
+  }
+
+  doneTask(id: number) {
+    this.afAuth.idToken.pipe(first()).subscribe(idToken => {
+      if (idToken) {
+        const headers = new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${idToken}`,
+        });
+        const url = `${environment.apiHost}/tasks/${id}`;
+        this.http.patch<Task>(url, { completed: true }, { headers: headers }).subscribe();
       }
     });
   }
