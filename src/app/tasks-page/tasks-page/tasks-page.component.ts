@@ -67,4 +67,17 @@ export class TasksPageComponent implements OnInit {
       }
     });
   }
+
+  doneTask(id: number) {
+    this.afAuth.idToken.pipe(first()).subscribe(idToken => {
+      if (idToken) {
+        const headers = new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${idToken}`,
+        });
+        const url = `${environment.apiHost}/tasks/${id}`;
+        this.http.patch<Task>(url, { completed: true }, { headers: headers }).subscribe();
+      }
+    });
+  }
 }
