@@ -52,4 +52,19 @@ export class TasksPageComponent implements OnInit {
       }
     });
   }
+
+  deleteTask(id: number) {
+    this.afAuth.idToken.pipe(first()).subscribe(idToken => {
+      if (idToken) {
+        const headers = new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${idToken}`,
+        });
+        const url = `${environment.apiHost}/tasks/${id}`;
+        this.http
+          .delete<Task>(url, { headers: headers })
+          .subscribe();
+      }
+    });
+  }
 }
