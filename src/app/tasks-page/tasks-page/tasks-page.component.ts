@@ -39,6 +39,10 @@ export class TasksPageComponent implements OnInit {
   }
 
   onSubmit() {
+    this.createTask(this.newTaskForm.value);
+  }
+
+  createTask(formData: any) {
     this.afAuth.idToken.pipe(first()).subscribe(idToken => {
       if (idToken) {
         const headers = new HttpHeaders({
@@ -47,7 +51,7 @@ export class TasksPageComponent implements OnInit {
         });
         const url = `${environment.apiHost}/tasks`;
         this.http
-          .post<Task>(url, this.newTaskForm.value, { headers: headers })
+          .post<Task>(url, formData, { headers: headers })
           .subscribe();
       }
     });
