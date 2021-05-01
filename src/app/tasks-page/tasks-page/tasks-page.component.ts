@@ -1,8 +1,6 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
-import { first } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { FormBuilder, Validators } from '@angular/forms';
 
@@ -23,19 +21,11 @@ export class TasksPageComponent implements OnInit {
     description: ['', Validators.required],
   });
 
-  constructor(private http: HttpClient, private afAuth: AngularFireAuth, private fb: FormBuilder) {}
+  constructor(private http: HttpClient, private fb: FormBuilder) {}
 
   ngOnInit() {
-    this.afAuth.idToken.pipe(first()).subscribe(idToken => {
-      if (idToken) {
-        const headers = new HttpHeaders({
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${idToken}`,
-        });
-        const url = `${environment.apiHost}/tasks`;
-        this.tasks$ = this.http.get<Task[]>(url, { headers: headers });
-      }
-    });
+    const url = `${environment.apiHost}/tasks`;
+    this.tasks$ = this.http.get<Task[]>(url);
   }
 
   onSubmit() {
@@ -43,45 +33,19 @@ export class TasksPageComponent implements OnInit {
   }
 
   createTask(formData: any) {
-    this.afAuth.idToken.pipe(first()).subscribe(idToken => {
-      if (idToken) {
-        const headers = new HttpHeaders({
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${idToken}`,
-        });
-        const url = `${environment.apiHost}/tasks`;
-        this.http
-          .post<Task>(url, formData, { headers: headers })
-          .subscribe();
-      }
-    });
+    const url = `${environment.apiHost}/tasks`;
+    this.http.post<Task>(url, formData).subscribe();
   }
 
   deleteTask(id: number) {
-    this.afAuth.idToken.pipe(first()).subscribe(idToken => {
-      if (idToken) {
-        const headers = new HttpHeaders({
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${idToken}`,
-        });
-        const url = `${environment.apiHost}/tasks/${id}`;
-        this.http
-          .delete<Task>(url, { headers: headers })
-          .subscribe();
-      }
-    });
+    const url = `${environment.apiHost}/tasks/${id}`;
+    this.http.delete<Task>(url).subscribe();
   }
 
   doneTask(id: number) {
-    this.afAuth.idToken.pipe(first()).subscribe(idToken => {
-      if (idToken) {
-        const headers = new HttpHeaders({
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${idToken}`,
-        });
-        const url = `${environment.apiHost}/tasks/${id}`;
-        this.http.patch<Task>(url, { completed: true }, { headers: headers }).subscribe();
-      }
-    });
+    const url = `${environment.apiHost}/tasks/${id}`;
+    this.http
+      .patch<Task>(url, { completed: true })
+      .subscribe();
   }
 }
