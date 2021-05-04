@@ -24,6 +24,10 @@ export class TasksPageComponent implements OnInit {
   constructor(private http: HttpClient, private fb: FormBuilder) {}
 
   ngOnInit() {
+    this.fetchTasks();
+  }
+
+  fetchTasks() {
     const url = `${environment.apiHost}/tasks`;
     this.tasks$ = this.http.get<Task[]>(url);
   }
@@ -34,18 +38,24 @@ export class TasksPageComponent implements OnInit {
 
   createTask(formData: any) {
     const url = `${environment.apiHost}/tasks`;
-    this.http.post<Task>(url, formData).subscribe();
+    this.http.post<Task>(url, formData).subscribe(_task => {
+      this.fetchTasks();
+    });
   }
 
   deleteTask(id: number) {
     const url = `${environment.apiHost}/tasks/${id}`;
-    this.http.delete<Task>(url).subscribe();
+    this.http.delete<Task>(url).subscribe(_response => {
+      this.fetchTasks();
+    });
   }
 
   doneTask(id: number) {
     const url = `${environment.apiHost}/tasks/${id}`;
     this.http
       .patch<Task>(url, { completed: true })
-      .subscribe();
+      .subscribe(_task => {
+        this.fetchTasks();
+      });
   }
 }
