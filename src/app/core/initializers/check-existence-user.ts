@@ -23,7 +23,6 @@ export function checkExistenceUser(http: HttpClient, afAuth: AngularFireAuth) {
             return of();
           }),
           catchError((response: HttpErrorResponse) => {
-            console.log(response);
             if (response.status === 404) {
               // NOTE: 不整合な状態なのでログアウトする
               afAuth.signOut();
