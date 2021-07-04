@@ -17,7 +17,7 @@ export function checkExistenceUser(http: HttpClient, afAuth: AngularFireAuth): (
         //       firebaseではログインしていて、自前のapiにはUserが存在していない不整合な状態の時はfirebaseでログアウトする。
         //       次にfirebaseでログインした時にUserが作られるので不整合は解消される。
         const url = `${environment.apiHost}/auth/me`;
-        return http.get(url, { responseType: 'text' }).pipe(
+        return http.get(url).pipe(
           mergeMap(_response => {
             // NOTE: Userは存在しているので問題なし
             return of();

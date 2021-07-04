@@ -23,7 +23,7 @@ export class UserAuthService {
     if (result.user) {
       const url = `${environment.apiHost}/auth/me`;
       try {
-        await this.http.get(url, { responseType: 'text' }).pipe(timeout(TIMEOUT_MSEC)).toPromise();
+        await this.http.get(url).pipe(timeout(TIMEOUT_MSEC)).toPromise();
         return { result: 'AlreadyCreated' };
       } catch (error) {
         if (error.status === 404) {
