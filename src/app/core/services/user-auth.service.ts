@@ -53,4 +53,8 @@ export class UserAuthService {
     await currentUser.delete();
     return;
   }
+
+  async signOut(): Promise<void> {
+    return this.afAuth.signOut();
+  }
 }

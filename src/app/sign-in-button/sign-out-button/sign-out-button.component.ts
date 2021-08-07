@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
+import { UserAuthService } from 'src/app/core/services/user-auth.service';
 
 @Component({
   selector: 'app-sign-out-button',
@@ -7,11 +7,11 @@ import { AngularFireAuth } from '@angular/fire/auth';
   styleUrls: ['./sign-out-button.component.scss'],
 })
 export class SignOutButtonComponent implements OnInit {
-  constructor(private afAuth: AngularFireAuth) {}
+  constructor(private userAuth: UserAuthService) {}
 
   ngOnInit() {}
 
   signOut() {
-    this.afAuth.signOut();
+    this.userAuth.signOut();
   }
 }
