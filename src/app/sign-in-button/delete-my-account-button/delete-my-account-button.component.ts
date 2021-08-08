@@ -3,18 +3,18 @@ import { Router } from '@angular/router';
 import { UserAuthService } from 'src/app/core/services/user-auth.service';
 
 @Component({
-  selector: 'app-sign-out-button',
-  templateUrl: './sign-out-button.component.html',
-  styleUrls: ['./sign-out-button.component.scss'],
+  selector: 'app-delete-my-account-button',
+  templateUrl: './delete-my-account-button.component.html',
+  styleUrls: ['./delete-my-account-button.component.scss'],
 })
-export class SignOutButtonComponent implements OnInit {
+export class DeleteMyAccountButtonComponent implements OnInit {
   constructor(private userAuth: UserAuthService, private router: Router) {}
 
   ngOnInit() {}
 
-  signOut() {
+  deleteMyAccount() {
     this.userAuth
-      .signOut()
+      .deleteMyAccount()
       .then(() => {
         this.router.navigate(['/']);
       })

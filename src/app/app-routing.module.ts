@@ -24,6 +24,11 @@ const routes: Routes = [
     loadChildren: () => import('./tasks-page/tasks-page.module').then(m => m.TasksPageModule),
     ...canActivate(redirectUnauthorizedToLogin),
   },
+  {
+    path: 'account',
+    loadChildren: () => import('./account-page/account-page.module').then(m => m.AccountPageModule),
+    ...canActivate(redirectUnauthorizedToLogin),
+  },
 ];
 
 @NgModule({

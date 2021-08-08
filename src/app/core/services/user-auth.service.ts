@@ -41,4 +41,20 @@ export class UserAuthService {
 
     throw { result: 'Error' };
   }
+
+  async deleteMyAccount(): Promise<void> {
+    const currentUser = await this.afAuth.currentUser;
+    if (!currentUser) {
+      throw "couldn't get firebase user";
+    }
+
+    const url = `${environment.apiHost}/auth/me`;
+    await this.http.delete(url).pipe(timeout(TIMEOUT_MSEC)).toPromise();
+    await currentUser.delete();
+    return;
+  }
+
+  async signOut(): Promise<void> {
+    return this.afAuth.signOut();
+  }
 }
