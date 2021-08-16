@@ -39,6 +39,7 @@ export class TasksPageComponent implements OnInit {
   createTask(formData: any) {
     const url = `${environment.apiHost}/tasks`;
     this.http.post<Task>(url, formData).subscribe(_task => {
+      this.newTaskForm.reset();
       this.fetchTasks();
     });
   }
