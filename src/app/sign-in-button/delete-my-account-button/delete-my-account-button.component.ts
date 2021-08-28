@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserAuthService } from 'src/app/core/services/user-auth.service';
 
@@ -7,10 +7,8 @@ import { UserAuthService } from 'src/app/core/services/user-auth.service';
   templateUrl: './delete-my-account-button.component.html',
   styleUrls: ['./delete-my-account-button.component.scss'],
 })
-export class DeleteMyAccountButtonComponent implements OnInit {
+export class DeleteMyAccountButtonComponent {
   constructor(private userAuth: UserAuthService, private router: Router) {}
-
-  ngOnInit() {}
 
   deleteMyAccount() {
     this.userAuth

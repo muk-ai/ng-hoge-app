@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserAuthService } from 'src/app/core/services/user-auth.service';
 
@@ -7,10 +7,8 @@ import { UserAuthService } from 'src/app/core/services/user-auth.service';
   templateUrl: './sign-out-button.component.html',
   styleUrls: ['./sign-out-button.component.scss'],
 })
-export class SignOutButtonComponent implements OnInit {
+export class SignOutButtonComponent {
   constructor(private userAuth: UserAuthService, private router: Router) {}
-
-  ngOnInit() {}
 
   signOut() {
     this.userAuth
