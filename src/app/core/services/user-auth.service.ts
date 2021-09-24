@@ -47,6 +47,26 @@ export class UserAuthService {
     if (!currentUser) {
       throw "couldn't get firebase user";
     }
+    if (!Array.isArray(currentUser.providerData)) {
+      throw 'no providerData';
+    }
+
+    const providerIds = currentUser.providerData.map(data => data?.providerId);
+    const providerId = providerIds[0];
+    if (!providerId) {
+      throw 'no providerId';
+    }
+
+    switch (providerId) {
+      case 'google.com':
+        await currentUser.reauthenticateWithPopup(new firebase.auth.GoogleAuthProvider());
+        break;
+      case 'twitter.com':
+        await currentUser.reauthenticateWithPopup(new firebase.auth.TwitterAuthProvider());
+        break;
+      default:
+        throw 'no supported provider';
+    }
 
     const url = `${environment.apiHost}/auth/me`;
     await this.http.delete(url).pipe(timeout(TIMEOUT_MSEC)).toPromise();
