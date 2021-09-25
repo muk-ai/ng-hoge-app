@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import firebase from 'firebase/app';
 import { environment } from 'src/environments/environment';
 import { timeout } from 'rxjs/operators';
@@ -25,17 +25,18 @@ export class UserAuthService {
       try {
         await this.http.get(url).pipe(timeout(TIMEOUT_MSEC)).toPromise();
         return { result: 'AlreadyCreated' };
-      } catch (error) {
-        if (error.status === 404) {
-          try {
-            await this.http.post(url, '').pipe(timeout(TIMEOUT_MSEC)).toPromise();
-            return { result: 'Created' };
-          } catch (error) {
-            throw { result: 'Error', error };
+      } catch (error: unknown) {
+        if (error instanceof HttpErrorResponse) {
+          if (error.status === 404) {
+            try {
+              await this.http.post(url, '').pipe(timeout(TIMEOUT_MSEC)).toPromise();
+              return { result: 'Created' };
+            } catch (error) {
+              throw { result: 'Error', error };
+            }
           }
-        } else {
-          throw { result: 'Error', error };
         }
+        throw { result: 'Error', error };
       }
     }
 
