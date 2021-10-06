@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import firebase from 'firebase/app';
+import firebase from 'firebase/compat/app';
 import { environment } from 'src/environments/environment';
 import { timeout } from 'rxjs/operators';
 
