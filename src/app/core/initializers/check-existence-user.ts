@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, first, mergeMap } from 'rxjs/operators';
-import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { environment } from '../../../environments/environment';
 
 export function checkExistenceUser(http: HttpClient, afAuth: AngularFireAuth): () => Observable<unknown> {
