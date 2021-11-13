@@ -23,7 +23,7 @@
     "@angular/router": "~12.2.8",
     "firebase": "^9.4.1",
     "rxfire": "^6.0.0",
-    "rxjs": "^7.0",
+    "rxjs": "^6.0.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.4"
   },
