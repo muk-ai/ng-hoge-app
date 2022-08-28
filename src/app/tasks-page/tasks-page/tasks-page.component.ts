@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { UntypedFormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
 interface Task {
   id: number;
@@ -21,7 +21,7 @@ export class TasksPageComponent implements OnInit {
     description: ['', Validators.required],
   });
 
-  constructor(private http: HttpClient, private fb: UntypedFormBuilder) {}
+  constructor(private http: HttpClient, private fb: FormBuilder) {}
 
   ngOnInit() {
     this.fetchTasks();
@@ -53,10 +53,8 @@ export class TasksPageComponent implements OnInit {
 
   doneTask(id: number) {
     const url = `${environment.apiHost}/tasks/${id}`;
-    this.http
-      .patch<Task>(url, { completed: true })
-      .subscribe(_task => {
-        this.fetchTasks();
-      });
+    this.http.patch<Task>(url, { completed: true }).subscribe(_task => {
+      this.fetchTasks();
+    });
   }
 }
