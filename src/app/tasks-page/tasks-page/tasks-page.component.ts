@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 
 interface Task {
   id: number;
@@ -21,7 +21,7 @@ export class TasksPageComponent implements OnInit {
     description: ['', Validators.required],
   });
 
-  constructor(private http: HttpClient, private fb: FormBuilder) {}
+  constructor(private http: HttpClient, private fb: UntypedFormBuilder) {}
 
   ngOnInit() {
     this.fetchTasks();
