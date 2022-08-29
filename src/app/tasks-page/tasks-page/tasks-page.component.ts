@@ -53,10 +53,8 @@ export class TasksPageComponent implements OnInit {
 
   doneTask(id: number) {
     const url = `${environment.apiHost}/tasks/${id}`;
-    this.http
-      .patch<Task>(url, { completed: true })
-      .subscribe(_task => {
-        this.fetchTasks();
-      });
+    this.http.patch<Task>(url, { completed: true }).subscribe(_task => {
+      this.fetchTasks();
+    });
   }
 }

@@ -132,8 +132,10 @@
       }
     }
   },
-  "defaultProject": "ng-hoge-app",
   "cli": {
-    "defaultCollection": "@angular-eslint/schematics"
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ],
+    "analytics": "2254f054-973e-437b-905a-6d2f40888bc6"
   }
 }
